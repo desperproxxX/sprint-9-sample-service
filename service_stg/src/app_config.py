@@ -19,7 +19,8 @@ class AppConfig:
         self.kafka_consumer_topic = str(os.getenv('KAFKA_SOURCE_TOPIC') or "")
         self.kafka_producer_username = str(os.getenv('KAFKA_CONSUMER_USERNAME') or "")
         self.kafka_producer_password = str(os.getenv('KAFKA_CONSUMER_PASSWORD') or "")
-        self.kafka_producer_topic = str(os.getenv('KAFKA_DESTINATION_TOPIC') or "")
+        # self.kafka_producer_topic = str(os.getenv('KAFKA_DESTINATION_TOPIC') or "")
+        self.kafka_producer_topic = str(os.getenv('KAFKA_STG_SERVICE_ORDERS_TOPIC') or "")
 
         self.redis_host = str(os.getenv('REDIS_HOST') or "")
         self.redis_port = int(str(os.getenv('REDIS_PORT')) or 0)

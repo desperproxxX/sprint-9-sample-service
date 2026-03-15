@@ -6,16 +6,32 @@ replicaCount: 1
 
 image:
   # Link to your container registry. You will launch it in Yandex Cloud.
-  repository: cr.yandex/...
+  repository: cr.yandex/crpn4r3lb1p72fv7v101/dds_service
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "your-tag"
+  tag: "v2026-03-15-r28"
 
 containerPort: 5000
 
 config:
-  EXAMPLE_ENV1: "value"
-  EXAMPLE_ANOTHER_ENV2: "value"
+  KAFKA_HOST: "rc1a-7j9hcd9hpgvn9jjq.mdb.yandexcloud.net"
+  KAFKA_PORT: "9091"
+  KAFKA_CONSUMER_USERNAME: "producer_consumer"
+  KAFKA_CONSUMER_PASSWORD: "Kudry@shka!"
+  KAFKA_CONSUMER_GROUP: "desperprox_dds"
+  KAFKA_SOURCE_TOPIC: "stg-service-orders"
+  KAFKA_DDS_SERVICE_ORDERS_TOPIC: "dds-service-orders"
+
+  PG_WAREHOUSE_HOST: "rc1b-57chu90f89s86s5t.mdb.yandexcloud.net"
+  PG_WAREHOUSE_PORT: "6432"
+  PG_WAREHOUSE_DBNAME: "sprint9dwh"
+  PG_WAREHOUSE_USER: "db_user"
+  PG_WAREHOUSE_PASSWORD: "Kudry@shka!"
+
+  REDIS_HOST: "c-c9q72frkmlqn2vgfsshe.rw.mdb.yandexcloud.net"
+  REDIS_PORT: "6380"
+  REDIS_PASSWORD: "Kudry@shka!"
+
 
 imagePullSecrets: []
 nameOverride: ""

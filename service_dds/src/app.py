@@ -4,7 +4,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 
 from app_config import AppConfig
-from sample_app.sample_job import SampleMessageProcessor
+from dds_loader.dds_message_processor_job import DdsMessageProcessor
+from dds_loader.repository.dds_repository import DdsRepository
+import threading
 
 app = Flask(__name__)
 
@@ -24,15 +26,21 @@ if __name__ == '__main__':
     # Инициализируем конфиг. Для удобства, вынесли логику получения значений переменных окружения в отдельный класс.
     config = AppConfig()
 
+    pg_db = config.pg_warehouse_db()
+    dds_repo = DdsRepository(pg_db)
+
     # Инициализируем процессор сообщений.
     # Пока он пустой. Нужен для того, чтобы потом в нем писать логику обработки сообщений из Kafka.
-    proc = SampleMessageProcessor(app.logger)
+    proc = DdsMessageProcessor(
+        config.kafka_consumer(),
+        config.kafka_producer(),
+        dds_repo,
+        100,
+        app.logger
+        )
 
-    # Запускаем процессор в бэкграунде.
-    # BackgroundScheduler будет по расписанию вызывать функцию run нашего обработчика(SampleMessageProcessor).
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(func=proc.run, trigger="interval", seconds=config.DEFAULT_JOB_INTERVAL)
-    scheduler.start()
+    thread = threading.Thread(target=proc.run)
+    thread.start()
 
     # стартуем Flask-приложение.
     app.run(debug=True, host='0.0.0.0', use_reloader=False)
